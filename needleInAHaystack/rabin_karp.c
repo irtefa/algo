@@ -12,6 +12,7 @@ int rabin_karp(char text[], char pattern[])
 {
 	int t_len = strlen(text);
 	int p_len = strlen(pattern);
+	int i, j;
 
 	// return if pattern longer than text
 	if(p_len > t_len)
@@ -19,24 +20,24 @@ int rabin_karp(char text[], char pattern[])
 		return 0;
 	}
 
-	int hp = 0;
+	// calculate if the first segment of the text matches the pattern
+	for(i = 0; i < p_len; i++)
+	{
+		if(pattern[i] != text[i])
+		{
+			break;
+		}
+	}
+	if(i == p_len)
+	{
+		return 1;
+	}
+
+	int hp, ht = 0;
 	// calculate the hash for the pattern
-	int i, j;
 	for(i = 0; i < p_len; i++)
 	{
 		hp = mod(hp * B + pattern[i], M);
-	}
-
-	// calculate if the first segment of the text matches the pattern
-	int ht = 0;
-	for(i = 0; i < p_len; i++)
-	{
-		ht = mod(ht * B + text[i], M);
-	}
-	if(ht == hp)
-	{
-		// the first p_len segment matches
-		return 1;
 	}
 
 	// naive rabin karp
