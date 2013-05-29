@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define M 101
+#define M 3571
 #define B 256
-int mod(int a, int b)
-{
-	return (a % b)	;
-}
 
 int rabin_karp(char text[], char pattern[])
 {
@@ -19,8 +15,13 @@ int rabin_karp(char text[], char pattern[])
 	{
 		return 0;
 	}
-
-	// calculate if the first segment of the text matches the pattern
+	int h = 1;
+	// calculate h = B ^ (m - 1)
+	for (i = 0; i < p_len - 1; i++)
+	{
+            	h = (h*B)%M;
+  	}
+  	// calculate if the first segment of the text matches the pattern
 	for(i = 0; i < p_len; i++)
 	{
 		if(pattern[i] != text[i])
@@ -34,21 +35,17 @@ int rabin_karp(char text[], char pattern[])
 		return 1;
 	}
 
+	// calculate the hash for the pattern
 	int hp = 0;
 	int ht = 0;
-	// calculate the hash for the pattern
 	for(i = 0; i < p_len; i++)
 	{
-		hp = mod(hp * B + pattern[i], M);
+		hp = (hp * B + pattern[i]) % M;
+		ht = (ht * B + text[i]) % M;
 	}
 	// naive rabin karp
 	for(i = 0; i < t_len; i++)
 	{
-		ht = 0;
-		for(j = 0; j < p_len; j++)
-		{
-			ht = mod(ht * B + text[i + j], M);
-		}
 		if(ht == hp)
 		{
 			// check character by character if it matches
@@ -65,6 +62,14 @@ int rabin_karp(char text[], char pattern[])
 				printf("found at %d\n", i);
 				return 1;
 			}
+		}
+		// update hash[text] from previous hash
+		// subtract previous character and add the next character
+		// (B * (hash - prev character * d^(m - 1))  + next character) mod M
+		ht = (B * (ht - text[i] * h) + text[i + p_len]) % M;
+		if(ht < 0)
+		{
+			ht = ht + M;
 		}
 	}
 	return 0;
