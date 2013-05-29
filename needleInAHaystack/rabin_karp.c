@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define M 12289
-#define B 10
+#define M 101
+#define B 256
 int mod(int a, int b)
 {
-	return (a % b + b) % b;
+	return (a % b)	;
 }
 
 int rabin_karp(char text[], char pattern[])
@@ -30,16 +30,17 @@ int rabin_karp(char text[], char pattern[])
 	}
 	if(i == p_len)
 	{
+		printf("found at %d\n", i - p_len);
 		return 1;
 	}
 
-	int hp, ht = 0;
+	int hp = 0;
+	int ht = 0;
 	// calculate the hash for the pattern
 	for(i = 0; i < p_len; i++)
 	{
 		hp = mod(hp * B + pattern[i], M);
 	}
-
 	// naive rabin karp
 	for(i = 0; i < t_len; i++)
 	{
@@ -61,6 +62,7 @@ int rabin_karp(char text[], char pattern[])
 			// text and pattern matches
 			if(j == p_len)
 			{
+				printf("found at %d\n", i);
 				return 1;
 			}
 		}
