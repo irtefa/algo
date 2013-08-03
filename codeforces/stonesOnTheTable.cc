@@ -5,22 +5,16 @@ using namespace std;
 
 int main() {
     int n, i=0;
-    int j = 1;
     int r = 0;
     string s;
 
     cin >> n;
     cin >> s;
     
-    while (j < n) {
-      if (s[i] == s[j]) {
-          j++;
-          r++;
-      } else {
-          i=j;
-          j++;
-      }
+    for (i = 1; i < n; i++) {
+        r += (s[i] == s[i-1]);
     }
+
     cout << r;
     return 0;
 }
