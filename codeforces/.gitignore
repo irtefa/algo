@@ -1,4 +1,4 @@
 *.exe
 *.obj
 a.out
-*.py
+*~
